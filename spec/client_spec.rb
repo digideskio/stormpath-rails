@@ -24,11 +24,11 @@ describe Stormpath::Rails::Client, :vcr do
     context "given a hash of account attributes" do
       let(:attributes) do
         {
-          email: 'test+foo+bar@example.com',
-          given_name: 'bazzy',
-          surname: 'foo',
-          password: 'P@66w0rd!',
-          username: 'testfoobar'
+          'email' => 'test+foo+bar@example.com',
+          'given_name' => 'bazzy',
+          'surname' => 'foo',
+          'password' => 'P@66w0rd!',
+          'username' => 'testfoobar'
         }
       end
 
@@ -39,7 +39,7 @@ describe Stormpath::Rails::Client, :vcr do
       it "should create an account" do
         expect(account).to be
         expect(account).to be_kind_of Stormpath::Resource::Account
-        expect(account.given_name).to eq(attributes[:given_name])
+        expect(account.given_name).to eq(attributes['given_name'])
       end
 
       after do
@@ -53,16 +53,16 @@ describe Stormpath::Rails::Client, :vcr do
       let(:username) { 'testfoobar' }
       let(:password) { 'Succ3ss!' }
 
-      let(:authenticated_account) do
-        Stormpath::Rails::Client.authenticate_account(
-          username, password
+      let!(:test_account) do
+        obtain_test_account(
+          'username' => 'testfoobar',
+          'password' => 'Succ3ss!'
         )
       end
 
-      before do
-        obtain_test_account(
-          username: username,
-          password: password
+      let(:authenticated_account) do
+        Stormpath::Rails::Client.authenticate_account(
+          username, password
         )
       end
 
@@ -83,7 +83,7 @@ describe Stormpath::Rails::Client, :vcr do
       let(:new_name) { "Bartholomew" }
 
       let(:created_account) do
-        obtain_test_account given_name: 'Foo'
+        obtain_test_account 'given_name' => 'Foo'
       end
 
       let(:reloaded_account) do
@@ -98,8 +98,7 @@ describe Stormpath::Rails::Client, :vcr do
 
       before do
         Stormpath::Rails::Client.update_account!(
-          created_account.href,
-          given_name: new_name
+          created_account.href, 'given_name' => new_name
         )
       end
 
